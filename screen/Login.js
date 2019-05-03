@@ -3,15 +3,20 @@ import React from 'react';
 import { StyleSheet,  View, Text, ScrollView, Button } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import { Input } from 'react-native-elements';
-var config = {
-    apiKey: "AIzaSyDo16nNZOdwoBMbliU04FEKB6qeNwvTlEI",
-    authDomain: "esempio-ae701.firebaseapp.com",
-    databaseURL: "https://esempio-ae701.firebaseio.com",
-    projectId: "esempio-ae701",
-    storageBucket: "esempio-ae701.appspot.com",
-    messagingSenderId: "252987762819"
+// secondo database per memorizzazione utenti
+var UserFirebaseConfig = {
+  apiKey: "AIzaSyCfHTEot6aznoDu_aNF6xElHM-6hetNsJs",
+  authDomain: "userappquest.firebaseapp.com",
+  databaseURL: "https://userappquest.firebaseio.com",
+  projectId: "userappquest",
+  storageBucket: "userappquest.appspot.com",
+  messagingSenderId: "702984912073",
+  appId: "1:702984912073:web:2580d48a25d82d63"
   };
-  !firebase.apps.length ? firebase.initializeApp(config) : null;
+  //!firebase.apps.length ? firebase.initializeApp(config) : null;
+
+  var UserAppQuest = firebase.initializeApp(UserFirebaseConfig, "UserAppQuest");
+  console.log("nome database" + UserAppQuest.name);
 
 export default class Login extends React.Component{
     static navigationOptions = {
@@ -19,14 +24,14 @@ export default class Login extends React.Component{
       }
       state = {
         isLoading: false,
-        email: "pippo@mail.com",
-        password: "pippo1234",
+        email: "",
+        password: "",
         error: ""
       };
 
       _signUp = () => {
         this.setState({ isLoading: true });
-        firebase
+        UserAppQuest
           .auth()
           .createUserWithEmailAndPassword(this.state.email, this.state.password)
           .then(user => {
