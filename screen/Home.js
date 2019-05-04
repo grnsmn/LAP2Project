@@ -54,7 +54,7 @@ export default class Home extends React.Component {
          <ListItem
                   key={i}
                   title={l.nome}
-                  onPress={()=>this.props.navigation.navigate("Questions")}
+                  onPress={()=>this.props.navigation.navigate("Login")}
                   bottomDivider='true'
                 />))}   
         </ScrollView>          

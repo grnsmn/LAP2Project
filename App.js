@@ -1,4 +1,3 @@
-// versione con login firebase funzionante, integrare secondo progetto firebase
 
 import React from 'react';
 import { createStackNavigator, createAppContainer } from "react-navigation";
@@ -18,7 +17,7 @@ import Questions from "./screen/Questions";
     screen: Login
   },
 },{
-  initialRouteName: "Login",
+  initialRouteName: "Home",
   mode: "modal"
 });
 
