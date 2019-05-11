@@ -54,32 +54,68 @@ export default class Questions extends React.Component {
               return (newItem = {
                 domanda: item.domanda,
                 a: { testo: item.a.testo, check: !item.a.check },
-                b: { testo: item.b.testo, check: item.b.check },
-                c: { testo: item.c.testo, check: item.c.check },
-                d: { testo: item.d.testo, check: item.d.check }
+                b: {
+                  testo: item.b.testo,
+                  check: item.b.check ? !item.b.check : item.b.check
+                },
+                c: {
+                  testo: item.c.testo,
+                  check: item.c.check ? !item.c.check : item.c.check
+                },
+                d: {
+                  testo: item.d.testo,
+                  check: item.d.check ? !item.d.check : item.d.check
+                }
               });
             case 2:
               return (newItem = {
                 domanda: item.domanda,
-                a: { testo: item.a.testo, check: item.a.check },
+                a: {
+                  testo: item.a.testo,
+                  check: item.a.check ? !item.a.check : item.a.check
+                },
                 b: { testo: item.b.testo, check: !item.b.check },
-                c: { testo: item.c.testo, check: item.c.check },
-                d: { testo: item.d.testo, check: item.d.check }
+                c: {
+                  testo: item.c.testo,
+                  check: item.c.check ? !item.c.check : item.c.check
+                },
+                d: {
+                  testo: item.d.testo,
+                  check: item.d.check ? !item.d.check : item.d.check
+                }
               });
             case 3:
               return (newItem = {
                 domanda: item.domanda,
-                a: { testo: item.a.testo, check: item.a.check },
-                b: { testo: item.b.testo, check: item.b.check },
+                a: {
+                  testo: item.a.testo,
+                  check: item.a.check ? !item.a.check : item.a.check
+                },
+                b: {
+                  testo: item.b.testo,
+                  check: item.b.check ? !item.b.check : item.b.check
+                },
                 c: { testo: item.c.testo, check: !item.c.check },
-                d: { testo: item.d.testo, check: item.d.check }
+                d: {
+                  testo: item.d.testo,
+                  check: item.d.check ? !item.c.check : item.c.check
+                }
               });
             case 4:
               return (newItem = {
                 domanda: item.domanda,
-                a: { testo: item.a.testo, check: item.a.check },
-                b: { testo: item.b.testo, check: item.b.check },
-                c: { testo: item.c.testo, check: item.c.check },
+                a: {
+                  testo: item.a.testo,
+                  check: item.a.check ? !item.a.check : item.a.check
+                },
+                b: {
+                  testo: item.b.testo,
+                  check: item.b.check ? !item.b.check : item.b.check
+                },
+                c: {
+                  testo: item.c.testo,
+                  check: item.c.check ? !item.c.check : item.c.check
+                },
                 d: { testo: item.d.testo, check: !item.d.check }
               });
           }
