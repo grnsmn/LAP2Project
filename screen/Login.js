@@ -1,3 +1,5 @@
+// implementare scrittura su secondo database file json con dati utente
+
 import * as firebase from "firebase";
 import React from 'react';
 import { StyleSheet,  View, Text, ScrollView, Button } from 'react-native';
@@ -20,7 +22,14 @@ var UserAppQuest = firebase.initializeApp(UserFirebaseConfig, "UserAppQuest");
 
 export default class Login extends React.Component{
     static navigationOptions = {
-        title: "Login"
+        title: "Login",
+        headerStyle: {
+          backgroundColor: '#f4511e',
+        },
+        headerTintColor: '#fff',
+        headerTitleStyle: {
+          fontWeight: 'bold',
+        }, 
       }
       state = {
         isLoading: false,

@@ -17,7 +17,8 @@ var config = {
 
 console.disableYellowBox = true;
 const database = firebase.database();
-console.log("nome database" + firebase.app().name);
+// console.log("nome database" + firebase.app().name);
+
 export default class Home extends React.Component {
   state = {
     data: []
@@ -25,16 +26,20 @@ export default class Home extends React.Component {
 
   static navigationOptions = ({ navigation }) => {
     return {
-        header: (
-            <Header
-                centerComponent={<Button title="AppQuest" onPress = {() => navigation.navigate("Login")}/> }        
-              />
-        )
+      title: "Home",
+      headerStyle: {
+        backgroundColor: '#f4521e',
+      },
+      headerTintColor: '#fff',
+      headerTitleStyle: {
+        fontWeight: 'bold',
+      }, 
     }
   };
   componentDidMount() {
     // leggere il nostro array proveniente da firebase
     const questionari = database.ref('Questionari');
+    
     questionari.on('value', snap => { 
       var elenco = [];
       snap.forEach(child => {
@@ -43,7 +48,7 @@ export default class Home extends React.Component {
         });
       });
       this.setState({ data: elenco });
-      console.log(this.state.data);
+      // console.log(this.state.data);
     });
   }
 
@@ -54,8 +59,8 @@ export default class Home extends React.Component {
          <ListItem
                   key={i}
                   title={l.nome}
-                  onPress={()=>this.props.navigation.navigate("Login")}
-                  bottomDivider='true'
+                  onPress={()=>this.props.navigation.navigate("Questions",{scelta: l.nome})}
+                  bottomDivider="true"
                 />))}   
         </ScrollView>          
     );
