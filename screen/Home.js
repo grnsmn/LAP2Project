@@ -1,8 +1,8 @@
-import { Constants } from 'expo';
-import React from 'react';
-import { StyleSheet,  View, Text, ScrollView, Button  } from 'react-native';
+import { Constants } from "expo";
+import React from "react";
+import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
 import * as firebase from "firebase";
-import { ListItem, FormLabel, FormInput, Header} from 'react-native-elements';
+import { ListItem, FormLabel, FormInput, Header } from "react-native-elements";
 
 // Initialize Firebase
 var config = {
@@ -22,29 +22,29 @@ const database = firebase.database();
 export default class Home extends React.Component {
   state = {
     data: []
-   }
+  };
 
   static navigationOptions = ({ navigation }) => {
     return {
       title: "Home",
       headerStyle: {
-        backgroundColor: '#f4521e',
+        backgroundColor: "#f4521e"
       },
-      headerTintColor: '#fff',
+      headerTintColor: "#fff",
       headerTitleStyle: {
-        fontWeight: 'bold',
-      }, 
-    }
+        fontWeight: "bold"
+      }
+    };
   };
   componentDidMount() {
     // leggere il nostro array proveniente da firebase
-    const questionari = database.ref('Questionari');
-    
-    questionari.on('value', snap => { 
+    const questionari = database.ref("Questionari");
+
+    questionari.on("value", snap => {
       var elenco = [];
       snap.forEach(child => {
         elenco.push({
-          nome:child.key 
+          nome: child.key
         });
       });
       this.setState({ data: elenco });
@@ -53,29 +53,32 @@ export default class Home extends React.Component {
   }
 
   render() {
-    return (    
-        <ScrollView style={styles.container}>
-          {this.state.data.map((l, i) => (
-         <ListItem
-                  key={i}
-                  title={l.nome}
-                  onPress={()=>this.props.navigation.navigate("Questions",{scelta: l.nome})}
-                  bottomDivider="true"
-                />))}   
-        </ScrollView>          
+    return (
+      <ScrollView style={styles.container}>
+        {this.state.data.map((l, i) => (
+          <ListItem
+            key={i}
+            title={l.nome}
+            onPress={() =>
+              this.props.navigation.navigate("Questions", { scelta: l.nome })
+            }
+            bottomDivider="true"
+          />
+        ))}
+      </ScrollView>
     );
   }
 }
 
 const styles = StyleSheet.create({
-    container: {
-      flex: 1,
-      backgroundColor: 'white',
-      //paddingTop: Constants.statusBarHeight,
-      // alignItems: 'center',
-      // justifyContent: 'center',
-    },
-    header: {
-        color: 'white'
-    }
-  });
+  container: {
+    flex: 1,
+    backgroundColor: "white"
+    //paddingTop: Constants.statusBarHeight,
+    // alignItems: 'center',
+    // justifyContent: 'center',
+  },
+  header: {
+    color: "white"
+  }
+});
