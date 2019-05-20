@@ -16,6 +16,7 @@ var config = {
 !firebase.apps.length ? firebase.initializeApp(config) : null;
 
 console.disableYellowBox = true;
+
 const database = firebase.database();
 // console.log("nome database" + firebase.app().name);
 

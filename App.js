@@ -1,6 +1,5 @@
 import React from "react";
 import { createStackNavigator, createAppContainer } from "react-navigation";
-// import { ListItem, FormLabel, FormInput, Header } from 'react-native-elements';
 import Home from "./screen/Home";
 import Login from "./screen/Login";
 import Questions from "./screen/Questions";

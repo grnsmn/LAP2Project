@@ -1,5 +1,3 @@
-// implementare scrittura su secondo database file json con dati utente
-
 import * as firebase from "firebase";
 import React from "react";
 import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
@@ -18,9 +16,12 @@ var UserFirebaseConfig = {
 };
 //!firebase.apps.length ? firebase.initializeApp(config) : null;
 
-var UserAppQuest = firebase.initializeApp(UserFirebaseConfig, "UserAppQuest");
-var userDatabase = UserAppQuest.database();
-console.log("nome database" + UserAppQuest.name);
+export const UserAppQuest = firebase.initializeApp(
+  UserFirebaseConfig,
+  "UserAppQuest"
+);
+
+// console.log("nome database" + UserAppQuest.name);
 
 export default class Login extends React.Component {
   static navigationOptions = {
@@ -40,14 +41,18 @@ export default class Login extends React.Component {
     nome: "",
     cognome: "",
     matricola: "",
-    error: ""
+    error: "",
+    data: ""
   };
 
   _save = () => {
+    var data = new Date();
     const newUser = {
       nome: this.state.nome,
       cognome: this.state.cognome,
-      matricola: this.state.matricola
+      matricola: this.state.matricola,
+      data: data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear(),
+      ora: data.getTime()
     };
     console.log(newUser);
     UserAppQuest.database()
@@ -75,8 +80,7 @@ export default class Login extends React.Component {
       .signInWithEmailAndPassword(this.state.email, this.state.password) //modificare con la relativa per il LOGINq<<<<<<<<
       .then(user => {
         this.setState({ isLoading: false });
-        // console.log(user);
-        this.props.navigation.navigate("Questions");
+        this.props.navigation.navigate("Home");
       })
       .catch(error => {
         this.setState({ isLoading: false, error: error.message });
