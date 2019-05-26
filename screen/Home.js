@@ -18,8 +18,9 @@ var config = {
 console.disableYellowBox = true;
 
 const database = firebase.database();
-// console.log("nome database" + firebase.app().name);
+var currentUser = "";
 
+// console.log("nome database" + firebase.app().name);
 export default class Home extends React.Component {
   state = {
     data: []
@@ -40,10 +41,14 @@ export default class Home extends React.Component {
   componentDidMount() {
     // leggere il nostro array proveniente da firebase
     const questionari = database.ref("Questionari");
-
+    const { navigation } = this.props;
+    currentUser = navigation.getParam("id");
+    console.log("Utente appena registrato: " + currentUser);
+    // console.log(navigation.getParam("id"));
     questionari.on("value", snap => {
       var elenco = [];
       snap.forEach(child => {
+        // console.log(child.key);
         elenco.push({
           nome: child.key
         });
@@ -61,7 +66,10 @@ export default class Home extends React.Component {
             key={i}
             title={l.nome}
             onPress={() =>
-              this.props.navigation.navigate("Questions", { scelta: l.nome })
+              this.props.navigation.navigate("Questions", {
+                scelta: l.nome,
+                currentUser: currentUser
+              })
             }
             bottomDivider="true"
           />

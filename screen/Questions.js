@@ -3,12 +3,11 @@ import { StyleSheet, View, ScrollView, Button } from "react-native";
 import React from "react";
 import * as firebase from "firebase";
 import { Text, CheckBox } from "react-native-elements";
-import UserAppQuest from "./Login";
-const database = firebase.database();
-var test = "";
-// secondo database per memorizzazione utenti
 
-console.log("nome database" + UserAppQuest.name);
+const database = firebase.database(); //database principale dei questionari
+var testScelto = ""; //Per la memorizzazione del nome del test scelto
+var scores = 0;
+var idUser = "";
 export default class Questions extends React.Component {
   state = {
     data: [],
@@ -27,12 +26,24 @@ export default class Questions extends React.Component {
     };
   };
   componentDidMount() {
-    const { navigation } = this.props;
-    test = navigation.getParam("scelta");
-    // leggere array proveniente da database AppQuestionari
+    const { navigation } = this.props; //Utile a ricevere prop dalla screen Home (scelta teste e id user)
+    testScelto = navigation.getParam("scelta");
+    idUser = navigation.getParam("currentUser");
+
+    var user = firebase.auth().currentUser;
     const questionari = database.ref(
-      "Questionari/" + navigation.getParam("scelta")
+      //punta al ramo JSON della lista questionari
+      "Questionari/" + testScelto
     );
+    // const utenti = database.ref("Utenti"); //punta al ramo JSON  degli utenti che completano i test
+    // utenti.on("value", snap => {
+    //   // console.log(snap.child().key);
+    //   // snap.forEach(child => {
+    //   //   console.log(child.key);
+    //   // });
+    // });
+
+    // leggere la lista di questionari proveniente dal database
     questionari.on("value", snap => {
       var elenco = [];
       snap.forEach(child => {
@@ -46,20 +57,34 @@ export default class Questions extends React.Component {
         });
       });
       this.setState({ data: elenco, flagComplete: false });
-      // console.log(this.state.data);
     });
   }
   updateFlag = () => {
-    var score = 0;
+    var scoreA = 0;
+    var scoreB = 0;
+    var scoreC = 0;
+    var scoreD = 0;
     this.setState({ flagComplete: true });
-    console.log(test);
     this.state.data.map((l, i) => {
-      l.a.check && l.a.testo == l.esatta ? (score += 1) : (score = score);
-      l.b.check && l.b.testo == l.esatta ? (score += 1) : (score = score);
-      l.c.check && l.c.testo == l.esatta ? (score += 1) : (score = score);
-      l.d.check && l.d.testo == l.esatta ? (score += 1) : (score = score);
-      console.log("score: " + score);
+      if (l.a.check && l.a.testo == l.esatta) scoreA = 1;
+      if (l.b.check && l.b.testo == l.esatta) scoreB = 1;
+      if (l.c.check && l.c.testo == l.esatta) scoreC = 1;
+      if (l.d.check && l.d.testo == l.esatta) scoreD = 1;
     });
+    scores += scoreA + scoreB + scoreC + scoreD;
+
+    const utenti = database.ref("Utenti/" + idUser); //punta al ramo JSON  degli utenti che completano i test
+    // utenti.update({})
+    utenti.on("value", snap => {
+      // console.log(snap.child().val());
+      snap.forEach(child => {
+        console.log(child.child("id").val());
+        if (child.child("id").val() == idUser) {
+          console.log("corrisponde!");
+        }
+      });
+    });
+    console.log("score: " + scores);
   };
   onUpdateItem = (risp, i) => {
     this.setState(state => {
@@ -235,7 +260,11 @@ export default class Questions extends React.Component {
             </View>
           )
         )}
-        <Button title="Completato!" onPress={() => this.updateFlag()} />
+        {this.state.flagComplete ? (
+          <Button title="Punteggio" />
+        ) : (
+          <Button title="Completato!" onPress={() => this.updateFlag()} />
+        )}
       </ScrollView>
     );
   }
