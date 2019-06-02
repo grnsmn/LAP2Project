@@ -34,13 +34,6 @@ export default class Questions extends React.Component {
       //punta al ramo JSON della lista questionari
       "Questionari/" + testScelto
     );
-    // const utenti = database.ref("Utenti"); //punta al ramo JSON  degli utenti che completano i test
-    // utenti.on("value", snap => {
-    //   // console.log(snap.child().key);
-    //   // snap.forEach(child => {
-    //   //   console.log(child.key);
-    //   // });
-    // });
 
     // leggere la lista di questionari proveniente dal database
     questionari.on("value", snap => {
@@ -76,24 +69,25 @@ export default class Questions extends React.Component {
           ? array.push({ risposta: "A", punti: "1" })
           : array.push({ risposta: "A", punti: "0" });
       }
-      // if (l.b.check) {
-      //   l.b.testo == l.esatta
-      //     ? array.push({ risposta: "B", punti: "1" })
-      //     : array.push({ risposta: "B", punti: "0" });
-      // }
-      // if (l.c.check) {
-      //   l.c.testo == l.esatta
-      //     ? array.push({ risposta: "C", punti: "1" })
-      //     : array.push({ risposta: "C", punti: "0" });
-      // }
-      // if (l.d.check) {
-      //   l.d.testo == l.esatta
-      //     ? array.push({ risposta: "D", punti: "1" })
-      //     : array.push({ risposta: "D", punti: "0" });
-      // }
+      if (l.b.check) {
+        l.b.testo == l.esatta
+          ? array.push({ risposta: "B", punti: "1" })
+          : array.push({ risposta: "B", punti: "0" });
+      }
+      if (l.c.check) {
+        l.c.testo == l.esatta
+          ? array.push({ risposta: "C", punti: "1" })
+          : array.push({ risposta: "C", punti: "0" });
+      }
+      if (l.d.check) {
+        l.d.testo == l.esatta
+          ? array.push({ risposta: "D", punti: "1" })
+          : array.push({ risposta: "D", punti: "0" });
+      }
+      array.push({ risposta: "", punti: "0" });
     });
     scores += scoreA + scoreB + scoreC + scoreD;
-    console.log(array);
+
     const utenti = database.ref("Utenti/" + idUser.id); //punta al ramo JSON  degli utenti che completano i test
     // utenti.update({})
     utenti.on("value", snap => {
@@ -105,12 +99,10 @@ export default class Questions extends React.Component {
           nome_test: testScelto,
           array: { ...array }
         });
-        // if (child.child("id").val() == idUser) {
-        //   console.log("corrisponde!");
-        // }
       });
     });
   };
+
   onUpdateItem = (risp, i) => {
     this.setState(state => {
       const data = state.data.map((item, j) => {
