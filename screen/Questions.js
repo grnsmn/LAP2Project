@@ -29,7 +29,6 @@ export default class Questions extends React.Component {
     const { navigation } = this.props; //Utile a ricevere prop dalla screen Home (scelta teste e id user)
     testScelto = navigation.getParam("scelta");
     idUser = navigation.getParam("currentUser");
-
     var user = firebase.auth().currentUser;
     const questionari = database.ref(
       //punta al ramo JSON della lista questionari
@@ -60,6 +59,7 @@ export default class Questions extends React.Component {
     });
   }
   updateFlag = () => {
+    var array = [];
     var scoreA = 0;
     var scoreB = 0;
     var scoreC = 0;
@@ -70,21 +70,46 @@ export default class Questions extends React.Component {
       if (l.b.check && l.b.testo == l.esatta) scoreB = 1;
       if (l.c.check && l.c.testo == l.esatta) scoreC = 1;
       if (l.d.check && l.d.testo == l.esatta) scoreD = 1;
+
+      if (l.a.check) {
+        l.a.testo == l.esatta
+          ? array.push({ risposta: "A", punti: "1" })
+          : array.push({ risposta: "A", punti: "0" });
+      }
+      // if (l.b.check) {
+      //   l.b.testo == l.esatta
+      //     ? array.push({ risposta: "B", punti: "1" })
+      //     : array.push({ risposta: "B", punti: "0" });
+      // }
+      // if (l.c.check) {
+      //   l.c.testo == l.esatta
+      //     ? array.push({ risposta: "C", punti: "1" })
+      //     : array.push({ risposta: "C", punti: "0" });
+      // }
+      // if (l.d.check) {
+      //   l.d.testo == l.esatta
+      //     ? array.push({ risposta: "D", punti: "1" })
+      //     : array.push({ risposta: "D", punti: "0" });
+      // }
     });
     scores += scoreA + scoreB + scoreC + scoreD;
-
-    const utenti = database.ref("Utenti/" + idUser); //punta al ramo JSON  degli utenti che completano i test
+    console.log(array);
+    const utenti = database.ref("Utenti/" + idUser.id); //punta al ramo JSON  degli utenti che completano i test
     // utenti.update({})
     utenti.on("value", snap => {
       // console.log(snap.child().val());
       snap.forEach(child => {
-        console.log(child.child("id").val());
-        if (child.child("id").val() == idUser) {
-          console.log("corrisponde!");
-        }
+        // console.log(child.val());
+        utenti.update({
+          punteggio: scores,
+          nome_test: testScelto,
+          array: { ...array }
+        });
+        // if (child.child("id").val() == idUser) {
+        //   console.log("corrisponde!");
+        // }
       });
     });
-    console.log("score: " + scores);
   };
   onUpdateItem = (risp, i) => {
     this.setState(state => {

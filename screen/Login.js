@@ -2,8 +2,9 @@ import * as firebase from "firebase";
 import React from "react";
 import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
 import { Input } from "react-native-elements";
+// import * as RNFS from "react-native-fs";
 var database = firebase.database(); //database principale dei questionari
-
+// var RNFS = require("react-native-fs");
 // secondo database per memorizzazione utenti
 // var UserFirebaseConfig = {
 //   apiKey: "AIzaSyCfHTEot6aznoDu_aNF6xElHM-6hetNsJs",
@@ -37,15 +38,15 @@ export default class Login extends React.Component {
     id: "",
     email: "",
     password: "",
-    nome: "",
-    cognome: "",
     matricola: "",
-    error: "",
-    data: ""
+    cognome: "",
+    nome: "",
+    error: ""
   };
 
   _save = () => {
     var data = new Date();
+    // var path = RNFS.DocumentDirectoryPath;
     this.setState({ id: this.state.utenti.key });
     const newUser = {
       id: this.state.id,
@@ -53,12 +54,12 @@ export default class Login extends React.Component {
       nome: this.state.nome,
       cognome: this.state.cognome,
       matricola: this.state.matricola,
-      data: data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear(),
-      ora: "",
-      nome_test: ""
+      data: data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear()
     };
+    // var j = JSON.stringify(newUser);
     // console.log(this.state.id);
-    this.state.utenti.push(newUser);
+    this.state.utenti.set(newUser);
+    // console.log("file json creato: " + j);
   };
 
   _signUp = () => {
@@ -69,7 +70,11 @@ export default class Login extends React.Component {
       .then(user => {
         this.setState({ isLoading: false });
         this._save();
-        this.props.navigation.navigate("Home", { id: this.state.id });
+        this.props.navigation.navigate("Home", {
+          id: this.state.id,
+          nome: this.state.nome,
+          cognome: this.state.cognome
+        });
       })
       .catch(error => {
         this.setState({ isLoading: false, error: error.message });
@@ -80,7 +85,7 @@ export default class Login extends React.Component {
     this.setState({ isLoading: true });
     firebase
       .auth()
-      .signInWithEmailAndPassword(this.state.email, this.state.password) //modificare con la relativa per il LOGINq<<<<<<<<
+      .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(user => {
         this.setState({ isLoading: false });
         this.props.navigation.navigate("Home");

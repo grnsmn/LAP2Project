@@ -18,7 +18,11 @@ var config = {
 console.disableYellowBox = true;
 
 const database = firebase.database();
-var currentUser = "";
+var currentUser = {
+  nome: "",
+  cognome: "",
+  id: ""
+};
 
 // console.log("nome database" + firebase.app().name);
 export default class Home extends React.Component {
@@ -42,19 +46,19 @@ export default class Home extends React.Component {
     // leggere il nostro array proveniente da firebase
     const questionari = database.ref("Questionari");
     const { navigation } = this.props;
-    currentUser = navigation.getParam("id");
-    console.log("Utente appena registrato: " + currentUser);
-    // console.log(navigation.getParam("id"));
+    currentUser.id = navigation.getParam("id");
+    currentUser.nome = navigation.getParam("nome");
+    currentUser.cognome = navigation.getParam("cognome");
+
+    // console.log("Utente appena registrato: " + currentUser.id);
     questionari.on("value", snap => {
       var elenco = [];
       snap.forEach(child => {
-        // console.log(child.key);
         elenco.push({
           nome: child.key
         });
       });
       this.setState({ data: elenco });
-      // console.log(this.state.data);
     });
   }
 
