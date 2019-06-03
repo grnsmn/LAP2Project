@@ -29,7 +29,6 @@ export default class Questions extends React.Component {
     const { navigation } = this.props; //Utile a ricevere prop dalla screen Home (scelta teste e id user)
     testScelto = navigation.getParam("scelta");
     idUser = navigation.getParam("currentUser");
-    var user = firebase.auth().currentUser;
     const questionari = database.ref(
       //punta al ramo JSON della lista questionari
       "Questionari/" + testScelto
@@ -84,14 +83,11 @@ export default class Questions extends React.Component {
           ? array.push({ risposta: "D", punti: "1" })
           : array.push({ risposta: "D", punti: "0" });
       }
-      array.push({ risposta: "", punti: "0" });
     });
     scores += scoreA + scoreB + scoreC + scoreD;
-
+    // console.log(idUser.id);
     const utenti = database.ref("Utenti/" + idUser.id); //punta al ramo JSON  degli utenti che completano i test
-    // utenti.update({})
     utenti.on("value", snap => {
-      // console.log(snap.child().val());
       snap.forEach(child => {
         // console.log(child.val());
         utenti.update({
@@ -278,7 +274,12 @@ export default class Questions extends React.Component {
           )
         )}
         {this.state.flagComplete ? (
-          <Button title="Punteggio" />
+          <Button
+            title="Punteggio"
+            onPress={() =>
+              this.props.navigation.navigate("Scores", { punteggio: scores })
+            }
+          />
         ) : (
           <Button title="Completato!" onPress={() => this.updateFlag()} />
         )}

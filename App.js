@@ -3,7 +3,7 @@ import { createStackNavigator, createAppContainer } from "react-navigation";
 import Home from "./screen/Home";
 import Login from "./screen/Login";
 import Questions from "./screen/Questions";
-
+import Scores from "./screen/Scores";
 const AppNavigator = createStackNavigator(
   {
     Home: {
@@ -14,6 +14,9 @@ const AppNavigator = createStackNavigator(
     },
     Login: {
       screen: Login
+    },
+    Scores: {
+      screen: Scores
     }
   },
   {

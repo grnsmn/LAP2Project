@@ -47,6 +47,7 @@ export default class Home extends React.Component {
     const questionari = database.ref("Questionari");
     const { navigation } = this.props;
     currentUser.id = navigation.getParam("id");
+    console.log("home: " + currentUser.id);
     currentUser.nome = navigation.getParam("nome");
     currentUser.cognome = navigation.getParam("cognome");
 

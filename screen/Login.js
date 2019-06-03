@@ -46,7 +46,6 @@ export default class Login extends React.Component {
 
   _save = () => {
     var data = new Date();
-    // var path = RNFS.DocumentDirectoryPath;
     this.setState({ id: this.state.utenti.key });
     const newUser = {
       id: this.state.id,
@@ -57,7 +56,6 @@ export default class Login extends React.Component {
       data: data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear()
     };
     // var j = JSON.stringify(newUser);
-    // console.log(this.state.id);
     this.state.utenti.set(newUser);
     // console.log("file json creato: " + j);
   };
@@ -83,12 +81,26 @@ export default class Login extends React.Component {
   };
   _logIn = () => {
     this.setState({ isLoading: true });
+    var user = firebase.auth().currentUser;
+    const u = database.ref("Utenti");
+    u.on("value", snap => {
+      snap.forEach(child => {
+        if (child.child("email").val() == user.email) {
+          this.setState({ id: child.child("id").val() });
+        }
+      });
+    });
+
     firebase
       .auth()
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(user => {
         this.setState({ isLoading: false });
-        this.props.navigation.navigate("Home");
+        // this._search();
+        // console.log("func lohin: " + this.state.id); //PER QUALCHE RAGIONE NON STAMPA, NON ARRIVA UPDATE ID E NON MI FA BEN AGGIORNARE UTENTE GIA REGISTRATO
+        this.props.navigation.navigate("Home", {
+          id: this.state.id
+        });
       })
       .catch(error => {
         this.setState({ isLoading: false, error: error.message });
