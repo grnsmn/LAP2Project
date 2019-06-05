@@ -2,6 +2,8 @@ import * as firebase from "firebase";
 import React from "react";
 import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
 import { Input } from "react-native-elements";
+import { FileSystem } from "expo";
+
 // import * as RNFS from "react-native-fs";
 var database = firebase.database(); //database principale dei questionari
 // var RNFS = require("react-native-fs");
@@ -22,6 +24,14 @@ var database = firebase.database(); //database principale dei questionari
 // console.log("nome database" + UserAppQuest.name);
 
 export default class Login extends React.Component {
+  // async componentDidMount() {
+  //   const options = { encoding: FileSystem.EncodingTypes.Base64 };
+  //   var filename = FileSystem.documentDirectory + "text.json";
+  //   console.log(filename);
+  //   await FileSystem.writeAsStringAsync(filename, JSON.stringify(database.ref("Utenti")));
+  //   var read = await FileSystem.readAsStringAsync(filename, options);
+  //   console.log(read);
+  // }
   static navigationOptions = {
     title: "Login",
     headerStyle: {
@@ -35,7 +45,7 @@ export default class Login extends React.Component {
   state = {
     utenti: database.ref("Utenti").push(),
     isLoading: false,
-    id: "",
+    id: "default",
     email: "",
     password: "",
     matricola: "",
@@ -87,6 +97,8 @@ export default class Login extends React.Component {
       snap.forEach(child => {
         if (child.child("email").val() == user.email) {
           this.setState({ id: child.child("id").val() });
+          this.setState({ nome: child.child("nome").val() });
+          this.setState({ cognome: child.child("cognome").val() });
         }
       });
     });
@@ -99,7 +111,9 @@ export default class Login extends React.Component {
         // this._search();
         // console.log("func lohin: " + this.state.id); //PER QUALCHE RAGIONE NON STAMPA, NON ARRIVA UPDATE ID E NON MI FA BEN AGGIORNARE UTENTE GIA REGISTRATO
         this.props.navigation.navigate("Home", {
-          id: this.state.id
+          id: this.state.id,
+          nome: this.state.nome,
+          cognome: this.state.cognome
         });
       })
       .catch(error => {
@@ -113,7 +127,7 @@ export default class Login extends React.Component {
       <View style={{ flex: 1 }}>
         <Input
           placeholder="Email"
-          onChangeText={text => this.setState({ email: text })}
+          onChangeText={text => this.setState({ email: text.toLowerCase() })}
         />
         <Input
           placeholder="Password"

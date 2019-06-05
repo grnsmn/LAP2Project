@@ -1,13 +1,14 @@
-// implementare grafica questionario
 import { StyleSheet, View, ScrollView, Button } from "react-native";
 import React from "react";
 import * as firebase from "firebase";
 import { Text, CheckBox } from "react-native-elements";
+import { FileSystem } from "expo";
 
 const database = firebase.database(); //database principale dei questionari
 var testScelto = ""; //Per la memorizzazione del nome del test scelto
 var scores = 0;
 var idUser = "";
+var filename = "";
 export default class Questions extends React.Component {
   state = {
     data: [],
@@ -29,6 +30,12 @@ export default class Questions extends React.Component {
     const { navigation } = this.props; //Utile a ricevere prop dalla screen Home (scelta teste e id user)
     testScelto = navigation.getParam("scelta");
     idUser = navigation.getParam("currentUser");
+    filename =
+      FileSystem.documentDirectory +
+      idUser.cognome +
+      idUser.nome +
+      testScelto +
+      ".json";
     const questionari = database.ref(
       //punta al ramo JSON della lista questionari
       "Questionari/" + testScelto
@@ -49,6 +56,14 @@ export default class Questions extends React.Component {
       });
       this.setState({ data: elenco, flagComplete: false });
     });
+  }
+  async WR() {
+    console.log("dentro");
+    console.log(filename);
+    await FileSystem.writeAsStringAsync(filename, "scritto");
+    const options = { encoding: FileSystem.EncodingTypes.Base64 };
+    var read = await FileSystem.readAsStringAsync(filename, options);
+    console.log(read);
   }
   updateFlag = () => {
     var array = [];
@@ -85,9 +100,10 @@ export default class Questions extends React.Component {
       }
     });
     scores += scoreA + scoreB + scoreC + scoreD;
-    // console.log(idUser.id);
+    // console.log("Questions: " + idUser.id);
     const utenti = database.ref("Utenti/" + idUser.id); //punta al ramo JSON  degli utenti che completano i test
     utenti.on("value", snap => {
+      // console.log(snap);
       snap.forEach(child => {
         // console.log(child.val());
         utenti.update({
@@ -96,7 +112,9 @@ export default class Questions extends React.Component {
           array: { ...array }
         });
       });
+      this.WR();
     });
+    // this.WR();
   };
 
   onUpdateItem = (risp, i) => {
