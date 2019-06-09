@@ -2,36 +2,24 @@ import * as firebase from "firebase";
 import React from "react";
 import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
 import { Input } from "react-native-elements";
-import { FileSystem } from "expo";
+// import { FileSystem } from "expo";
 
-// import * as RNFS from "react-native-fs";
 var database = firebase.database(); //database principale dei questionari
-// var RNFS = require("react-native-fs");
-// secondo database per memorizzazione utenti
-// var UserFirebaseConfig = {
-//   apiKey: "AIzaSyCfHTEot6aznoDu_aNF6xElHM-6hetNsJs",
-//   authDomain: "userappquest.firebaseapp.com",
-//   databaseURL: "https://userappquest.firebaseio.com",
-//   projectId: "userappquest",
-//   storageBucket: "userappquest.appspot.com",
-//   messagingSenderId: "702984912073",
-//   appId: "1:702984912073:web:2580d48a25d82d63"
-// };
-// //!firebase.apps.length ? firebase.initializeApp(config) : null;
-
-// var UserAppQuest = firebase.initializeApp(UserFirebaseConfig, "UserAppQuest");
-// var userDatabase = UserAppQuest.database();
-// console.log("nome database" + UserAppQuest.name);
 
 export default class Login extends React.Component {
   // async componentDidMount() {
-  //   const options = { encoding: FileSystem.EncodingTypes.Base64 };
+  //   // const options = { encoding: FileSystem.EncodingTypes.Base64 };
   //   var filename = FileSystem.documentDirectory + "text.json";
-  //   console.log(filename);
-  //   await FileSystem.writeAsStringAsync(filename, JSON.stringify(database.ref("Utenti")));
-  //   var read = await FileSystem.readAsStringAsync(filename, options);
-  //   console.log(read);
+  //   // console.log(filename);
+  //   // await FileSystem.writeAsStringAsync(filename, JSON.stringify(database.ref("Utenti")));
+  //   // var read = await FileSystem.readAsStringAsync(filename, options);
+  //   // console.log(read);
+  //   await fetch("https://github.com/grnsmn/UploadUsersAppQuest.git", {
+  //     method: "POST",
+  //     body: filename
+  //   }).then(console.log("richiesta mandata"));
   // }
+
   static navigationOptions = {
     title: "Login",
     headerStyle: {
@@ -63,11 +51,14 @@ export default class Login extends React.Component {
       nome: this.state.nome,
       cognome: this.state.cognome,
       matricola: this.state.matricola,
-      data: data.getDate() + "/" + data.getMonth() + "/" + data.getFullYear()
+      data:
+        new Date().getDate() +
+        "/" +
+        new Date().getMonth() +
+        "/" +
+        new Date().getFullYear()
     };
-    // var j = JSON.stringify(newUser);
     this.state.utenti.set(newUser);
-    // console.log("file json creato: " + j);
   };
 
   _signUp = () => {
@@ -108,8 +99,6 @@ export default class Login extends React.Component {
       .signInWithEmailAndPassword(this.state.email, this.state.password)
       .then(user => {
         this.setState({ isLoading: false });
-        // this._search();
-        // console.log("func lohin: " + this.state.id); //PER QUALCHE RAGIONE NON STAMPA, NON ARRIVA UPDATE ID E NON MI FA BEN AGGIORNARE UTENTE GIA REGISTRATO
         this.props.navigation.navigate("Home", {
           id: this.state.id,
           nome: this.state.nome,

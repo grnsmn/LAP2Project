@@ -57,13 +57,12 @@ export default class Questions extends React.Component {
       this.setState({ data: elenco, flagComplete: false });
     });
   }
-  async WR() {
-    console.log("dentro");
+  async WR(str) {
     console.log(filename);
-    await FileSystem.writeAsStringAsync(filename, "scritto");
+    await FileSystem.writeAsStringAsync(filename, str);
     const options = { encoding: FileSystem.EncodingTypes.Base64 };
     var read = await FileSystem.readAsStringAsync(filename, options);
-    console.log(read);
+    console.log("letto dal file" + read);
   }
   updateFlag = () => {
     var array = [];
@@ -98,23 +97,31 @@ export default class Questions extends React.Component {
           ? array.push({ risposta: "D", punti: "1" })
           : array.push({ risposta: "D", punti: "0" });
       }
+      alert("non si è selezionata nessuna risposta");
+      this.props.navigation.navigate("Home", {
+        id: idUser.id,
+        nome: idUser.nome,
+        cognome: idUser.cognome
+      });
     });
     scores += scoreA + scoreB + scoreC + scoreD;
     // console.log("Questions: " + idUser.id);
+    var str;
     const utenti = database.ref("Utenti/" + idUser.id); //punta al ramo JSON  degli utenti che completano i test
     utenti.on("value", snap => {
-      // console.log(snap);
+      // console.log("prima " + );
       snap.forEach(child => {
         // console.log(child.val());
         utenti.update({
           punteggio: scores,
           nome_test: testScelto,
-          array: { ...array }
+          array: { ...array },
+          ora: new Date().getUTCHours() + ":" + new Date().getMinutes()
         });
       });
-      this.WR();
+      str = JSON.stringify(snap);
     });
-    // this.WR();
+    this.WR(str);
   };
 
   onUpdateItem = (risp, i) => {
