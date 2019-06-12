@@ -1,25 +1,11 @@
 import * as firebase from "firebase";
 import React from "react";
-import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
+import { View, Button } from "react-native";
 import { Input } from "react-native-elements";
-// import { FileSystem } from "expo";
 
 var database = firebase.database(); //database principale dei questionari
 
 export default class Login extends React.Component {
-  // async componentDidMount() {
-  //   // const options = { encoding: FileSystem.EncodingTypes.Base64 };
-  //   var filename = FileSystem.documentDirectory + "text.json";
-  //   // console.log(filename);
-  //   // await FileSystem.writeAsStringAsync(filename, JSON.stringify(database.ref("Utenti")));
-  //   // var read = await FileSystem.readAsStringAsync(filename, options);
-  //   // console.log(read);
-  //   await fetch("https://github.com/grnsmn/UploadUsersAppQuest.git", {
-  //     method: "POST",
-  //     body: filename
-  //   }).then(console.log("richiesta mandata"));
-  // }
-
   static navigationOptions = {
     title: "Login",
     headerStyle: {
@@ -43,7 +29,6 @@ export default class Login extends React.Component {
   };
 
   _save = () => {
-    var data = new Date();
     this.setState({ id: this.state.utenti.key });
     const newUser = {
       id: this.state.id,
@@ -60,7 +45,6 @@ export default class Login extends React.Component {
     };
     this.state.utenti.set(newUser);
   };
-
   _signUp = () => {
     this.setState({ isLoading: true });
     firebase
@@ -115,11 +99,11 @@ export default class Login extends React.Component {
     return (
       <View style={{ flex: 1 }}>
         <Input
-          placeholder="Email"
+          placeholder="Email*"
           onChangeText={text => this.setState({ email: text.toLowerCase() })}
         />
         <Input
-          placeholder="Password"
+          placeholder="Password*"
           secureTextEntry={true}
           onChangeText={text => this.setState({ password: text })}
         />

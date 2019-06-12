@@ -4,6 +4,7 @@ import Home from "./screen/Home";
 import Login from "./screen/Login";
 import Questions from "./screen/Questions";
 import Scores from "./screen/Scores";
+
 const AppNavigator = createStackNavigator(
   {
     Home: {

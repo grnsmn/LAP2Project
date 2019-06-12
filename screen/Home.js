@@ -1,8 +1,8 @@
-import { Constants } from "expo";
 import React from "react";
-import { StyleSheet, View, Text, ScrollView, Button } from "react-native";
+import { StyleSheet, ScrollView } from "react-native";
 import * as firebase from "firebase";
-import { ListItem, FormLabel, FormInput, Header } from "react-native-elements";
+import { ListItem } from "react-native-elements";
+console.disableYellowBox = true;
 
 // Initialize Firebase
 var config = {
@@ -15,9 +15,8 @@ var config = {
 };
 !firebase.apps.length ? firebase.initializeApp(config) : null;
 
-console.disableYellowBox = true;
-
 const database = firebase.database();
+
 var currentUser = {
   nome: "",
   cognome: "",
@@ -47,11 +46,9 @@ export default class Home extends React.Component {
     const questionari = database.ref("Questionari");
     const { navigation } = this.props;
     currentUser.id = navigation.getParam("id");
-    // console.log("home: " + currentUser.id);
     currentUser.nome = navigation.getParam("nome");
     currentUser.cognome = navigation.getParam("cognome");
 
-    // console.log("Utente appena registrato: " + currentUser.id);
     questionari.on("value", snap => {
       var elenco = [];
       snap.forEach(child => {

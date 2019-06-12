@@ -58,11 +58,11 @@ export default class Questions extends React.Component {
     });
   }
   async WR(str) {
-    console.log(filename);
+    // console.log(filename);
     await FileSystem.writeAsStringAsync(filename, str);
     const options = { encoding: FileSystem.EncodingTypes.Base64 };
     var read = await FileSystem.readAsStringAsync(filename, options);
-    console.log("letto dal file" + read);
+    // console.log("letto dal file" + read);
   }
   updateFlag = () => {
     var array = [];
@@ -97,26 +97,17 @@ export default class Questions extends React.Component {
           ? array.push({ risposta: "D", punti: "1" })
           : array.push({ risposta: "D", punti: "0" });
       }
-      alert("non si è selezionata nessuna risposta");
-      this.props.navigation.navigate("Home", {
-        id: idUser.id,
-        nome: idUser.nome,
-        cognome: idUser.cognome
-      });
     });
     scores += scoreA + scoreB + scoreC + scoreD;
-    // console.log("Questions: " + idUser.id);
     var str;
     const utenti = database.ref("Utenti/" + idUser.id); //punta al ramo JSON  degli utenti che completano i test
     utenti.on("value", snap => {
-      // console.log("prima " + );
       snap.forEach(child => {
-        // console.log(child.val());
         utenti.update({
           punteggio: scores,
           nome_test: testScelto,
           array: { ...array },
-          ora: new Date().getUTCHours() + ":" + new Date().getMinutes()
+          ora: new Date().getHours() + ":" + new Date().getMinutes()
         });
       });
       str = JSON.stringify(snap);

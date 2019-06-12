@@ -1,4 +1,4 @@
-import { StyleSheet, View } from "react-native";
+import { StyleSheet, View, Button } from "react-native";
 import React from "react";
 import { Text } from "react-native-elements";
 
@@ -27,6 +27,7 @@ export default class Scores extends React.Component {
     return (
       <View>
         <Text h3>Punteggio finale: {this.state.testo}</Text>
+        {/* <Button style={{ width: 200 }} title="Home" /> */}
       </View>
     );
   }
